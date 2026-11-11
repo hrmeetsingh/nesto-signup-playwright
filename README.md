@@ -95,6 +95,14 @@ Beyond the requested scenarios, I added these checks to widen coverage:
 
 ---
 
+## AI assistance
+
+I used **Claude Opus 5.5** (Anthropic), through Claude Code, to scaffold and set up this project and its documentation 
+
+The testing itself (manual exploration of the signup page in English and French, the API exploration in Bruno, the choice of scenarios and the bug report) is my own work, and I reviewed and ran every test in the suite. The type of coverage and organization of framework is decided by me and I can explain the rational behind the choices.
+
+---
+
 ## Bug report
 
 Issues found during manual and automated testing are written up in a **separate bug report, attached to the submission email**. The suite deliberately doesn't include failing tests for those bugs, so it stays green and catches regressions.
