@@ -1,5 +1,5 @@
 import { test as base, expect } from '@playwright/test';
-import type { Locale } from './data/rules';
+import type { Locale } from './data/i18n';
 import { SignupPage } from './pages/SignupPage';
 import { SignupApi } from './api/SignupApi';
 

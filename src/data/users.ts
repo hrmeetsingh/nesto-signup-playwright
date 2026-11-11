@@ -1,4 +1,4 @@
-import type { RuleKey } from './rules';
+import type { RuleKey } from './i18n';
 
 export type SignupField =
   | 'firstName'

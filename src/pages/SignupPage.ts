@@ -1,5 +1,5 @@
 import type { Locator, Page, Response } from '@playwright/test';
-import { LABELS, MESSAGES, SIGNUP_PATH, type Locale } from '../data/rules';
+import { LABELS, MESSAGES, SIGNUP_PATH, type Locale } from '../data/i18n';
 import type { SignupField, SignupUser } from '../data/users';
 import { ACCOUNTS_API } from '../api/SignupApi';
 import { BasePage } from './BasePage';
@@ -31,14 +31,12 @@ export class SignupPage extends BasePage {
     this.passwordConfirmation = textbox(label.passwordConfirmation);
     this.consent = page.getByTestId('agreement-checkbox');
     this.submitButton = page.getByRole('button', { name: label.submit, exact: true });
-    // The page always has an empty role=alert (route announcer), so match the text too.
     this.serverError = page.getByRole('alert').filter({ hasText: MESSAGES[locale].serverError });
   }
 
   async goto(): Promise<void> {
-    // Before hydration every input has id="field-1" and all labels read "First name",
-    // and a submit before the page is idle is silently ignored. open() waits for
-    // Confirm password and networkidle: keep both.
+    // load the page and wait for the password confirmation field to be ready
+    // without this wait, the test may try to fill the form before the page is ready, causing a timeout
     await this.open(SIGNUP_PATH[this.locale], this.passwordConfirmation);
   }
 
@@ -46,13 +44,13 @@ export class SignupPage extends BasePage {
     return this[field];
   }
 
-  /** The error element linked to the field through aria-describedby. */
+  // The error element linked to the field through aria-describedby
   async fieldError(field: SignupField): Promise<Locator> {
     const id = await this.fieldInput(field).getAttribute('aria-describedby');
     return this.page.locator(`[id="${id}"]`);
   }
 
-  /** Fills only the fields provided. */
+  // Fills only the fields provided in the user object. Does not submit.
   async fill(user: Partial<SignupUser>): Promise<void> {
     const fields: SignupField[] = [
       'firstName',
@@ -70,7 +68,7 @@ export class SignupPage extends BasePage {
     if (user.consent !== undefined) await this.consent.setChecked(user.consent);
   }
 
-  /** Starts counting POST /api/accounts requests. Returns a function that reads the count. */
+  // Starts counting POST /api/accounts requests. Returns a function that reads the count
   countSignupRequests(): () => number {
     let count = 0;
     this.page.on('request', (r) => {
@@ -83,7 +81,7 @@ export class SignupPage extends BasePage {
     await this.submitButton.click();
   }
 
-  /** Fill + submit, resolving with the POST /api/accounts response. */
+  // Fill + submit, resolving with the POST /api/accounts response
   async signup(user: Partial<SignupUser>): Promise<Response> {
     await this.fill(user);
     const response = this.waitForSignupResponse();

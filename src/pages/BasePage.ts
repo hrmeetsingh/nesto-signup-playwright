@@ -1,5 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
-import type { Locale } from '../data/rules';
+import type { Locale } from '../data/i18n';
 
 /** Parts shared by every page. The base URL lives in playwright.config.ts (`use.baseURL`). */
 export abstract class BasePage {

@@ -1,5 +1,5 @@
 import type { APIRequestContext, APIResponse } from '@playwright/test';
-import { LANGUAGE, type Locale } from '../data/rules';
+import { LANGUAGE, type Locale } from '../data/i18n';
 import { toE164, type SignupUser } from '../data/users';
 
 export const ACCOUNTS_API = '/api/accounts';
@@ -20,6 +20,7 @@ export class SignupApi {
       leadDistributeConsentAgreement: user.consent,
       partner: 'nesto',
       formName: 'signup',
+      createdAt: 'LOGIN'
     };
   }
 

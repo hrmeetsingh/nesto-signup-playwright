@@ -1,5 +1,5 @@
 import { test, expect } from '../../src/fixtures';
-import { EMPTY_FORM_ERRORS, MESSAGES } from '../../src/data/rules';
+import { EMPTY_FORM_ERRORS, MESSAGES } from '../../src/data/i18n';
 import { INVALID_CASES, invalidUser, validUser, type SignupField } from '../../src/data/users';
 
 test.describe('signup: client-side validation', { tag: '@negative' }, () => {

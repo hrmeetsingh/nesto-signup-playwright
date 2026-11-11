@@ -1,10 +1,10 @@
 import { test, expect } from '../../src/fixtures';
-import { LANGUAGE } from '../../src/data/rules';
+import { LANGUAGE } from '../../src/data/i18n';
 import { BOUNDARY, toE164, validUser, type SignupUser } from '../../src/data/users';
 import type { SignupPage } from '../../src/pages/SignupPage';
-import type { Locale } from '../../src/data/rules';
+import type { Locale } from '../../src/data/i18n';
 
-/** Signs up a new real user and checks the request, the 201 and the redirect. */
+// Signs up a new real user and checks the request, the 201 and the redirect
 async function expectSignupSucceeds(signupPage: SignupPage, user: SignupUser, locale: Locale) {
   await signupPage.goto();
   const response = await signupPage.signup(user);
@@ -18,8 +18,8 @@ async function expectSignupSucceeds(signupPage: SignupPage, user: SignupUser, lo
     region: user.province,
     language: LANGUAGE[locale],
     leadDistributeConsentAgreement: user.consent,
+    createdAt: 'LOGIN'
   });
-  // Compare the password without printing it in a failure message.
   expect(body.password === user.password, 'submitted password matches').toBe(true);
 
   expect(response.status()).toBe(201);
