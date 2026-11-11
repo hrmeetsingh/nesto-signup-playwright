@@ -18,8 +18,7 @@ export abstract class BasePage {
   }
 
   // Opens a path, then waits until the page is usable.
-  // Assumption: "usable" = `readyWhen` is in the DOM AND the network has gone quiet. The app is a
-  // Next.js page that hydrates after load; networkidle is our signal that hydration has finished.
+  // Assumption: "usable" = `readyWhen` is in the DOM AND the network has gone quiet. networkidle is our signal that hydration has finished.
   // If the app ever adds polling or a long-lived connection, networkidle will hang and this
   // needs a different ready signal.
   protected async open(path: string, readyWhen: Locator): Promise<void> {

@@ -8,6 +8,7 @@ export class SignupApi {
   constructor(private readonly request: APIRequestContext) {}
 
   // The same JSON body the UI sends.
+  // Assumption: the actual payload has many other fields, we choose the ones that map directly to the UI
   toPayload(user: SignupUser, locale: Locale = 'en-CA') {
     return {
       firstName: user.firstName,
