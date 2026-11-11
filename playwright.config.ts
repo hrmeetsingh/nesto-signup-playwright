@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { defineConfig, devices } from '@playwright/test';
-import type { AppOptions } from './tests/fixtures';
+import type { AppOptions } from './src/fixtures';
 
 const BASE_URL = process.env.BASE_URL ?? 'https://app.qa.nesto.ca';
 
@@ -37,7 +37,7 @@ export default defineConfig<AppOptions>({
   expect: {
     toHaveScreenshot: { maxDiffPixelRatio: 0.01, animations: 'disabled', caret: 'hide' },
   },
-  snapshotPathTemplate: '{testDir}/__screenshots__/{testFilePath}/{arg}-{projectName}-{platform}{ext}',
+  snapshotPathTemplate: '{testDir}/{testFileDir}/baselines/__screenshots__/{testFileName}/{arg}-{projectName}-{platform}{ext}',
 
   projects: [
     { name: 'api', testMatch: /signup\.api\.spec\.ts/ },

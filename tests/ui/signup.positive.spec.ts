@@ -1,8 +1,8 @@
-import { test, expect } from './fixtures';
-import { LANGUAGE } from './data/rules';
-import { BOUNDARY, toE164, validUser, type SignupUser } from './data/users';
-import type { SignupPage } from './pages/SignupPage';
-import type { Locale } from './data/rules';
+import { test, expect } from '../../src/fixtures';
+import { LANGUAGE } from '../../src/data/rules';
+import { BOUNDARY, toE164, validUser, type SignupUser } from '../../src/data/users';
+import type { SignupPage } from '../../src/pages/SignupPage';
+import type { Locale } from '../../src/data/rules';
 
 /** Signs up a new real user and checks the request, the 201 and the redirect. */
 async function expectSignupSucceeds(signupPage: SignupPage, user: SignupUser, locale: Locale) {

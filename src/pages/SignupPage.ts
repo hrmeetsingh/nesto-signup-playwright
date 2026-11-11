@@ -2,8 +2,9 @@ import type { Locator, Page, Response } from '@playwright/test';
 import { LABELS, MESSAGES, SIGNUP_PATH, type Locale } from '../data/rules';
 import type { SignupField, SignupUser } from '../data/users';
 import { ACCOUNTS_API } from '../api/SignupApi';
+import { BasePage } from './BasePage';
 
-export class SignupPage {
+export class SignupPage extends BasePage {
   readonly firstName: Locator;
   readonly lastName: Locator;
   readonly phoneCountry: Locator;
@@ -16,10 +17,8 @@ export class SignupPage {
   readonly submitButton: Locator;
   readonly serverError: Locator;
 
-  constructor(
-    readonly page: Page,
-    readonly locale: Locale,
-  ) {
+  constructor(page: Page, locale: Locale) {
+    super(page, locale);
     const label = LABELS[locale];
     const textbox = (name: string) => page.getByRole('textbox', { name, exact: true });
     this.firstName = textbox(label.firstName);
@@ -37,11 +36,10 @@ export class SignupPage {
   }
 
   async goto(): Promise<void> {
-    await this.page.goto(SIGNUP_PATH[this.locale]);
     // Before hydration every input has id="field-1" and all labels read "First name",
-    // and a submit before the page is idle is silently ignored. Keep both waits.
-    await this.passwordConfirmation.waitFor();
-    await this.page.waitForLoadState('networkidle');
+    // and a submit before the page is idle is silently ignored. open() waits for
+    // Confirm password and networkidle: keep both.
+    await this.open(SIGNUP_PATH[this.locale], this.passwordConfirmation);
   }
 
   fieldInput(field: SignupField): Locator {

@@ -1,5 +1,5 @@
-import { test, expect } from './fixtures';
-import { validUser } from './data/users';
+import { test, expect } from '../../src/fixtures';
+import { validUser } from '../../src/data/users';
 
 test.describe('POST /api/accounts', { tag: '@api' }, () => {
   test('valid user returns 201 without the password', { tag: '@positive' }, async ({ api }) => {

@@ -1,6 +1,6 @@
-import { test, expect } from './fixtures';
-import { EMPTY_FORM_ERRORS, MESSAGES } from './data/rules';
-import { INVALID_CASES, invalidUser, validUser, type SignupField } from './data/users';
+import { test, expect } from '../../src/fixtures';
+import { EMPTY_FORM_ERRORS, MESSAGES } from '../../src/data/rules';
+import { INVALID_CASES, invalidUser, validUser, type SignupField } from '../../src/data/users';
 
 test.describe('signup: client-side validation', { tag: '@negative' }, () => {
   test.beforeEach(async ({ signupPage }) => {

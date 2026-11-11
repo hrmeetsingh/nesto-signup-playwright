@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import type { Page, TestInfo } from '@playwright/test';
-import { test, expect } from './fixtures';
-import { validUser } from './data/users';
+import { test, expect } from '../../src/fixtures';
+import { validUser } from '../../src/data/users';
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 const FAIL_IMPACTS = ['serious', 'critical'];

@@ -1,6 +1,6 @@
-import { test, expect } from './fixtures';
-import { fixedUser, validUser } from './data/users';
-import type { SignupPage } from './pages/SignupPage';
+import { test, expect } from '../../src/fixtures';
+import { fixedUser, validUser } from '../../src/data/users';
+import type { SignupPage } from '../../src/pages/SignupPage';
 
 /** Select a fixed province (the default comes from the visitor's IP) and scroll to the top. */
 async function stabilise(signupPage: SignupPage) {

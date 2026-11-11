@@ -1,6 +1,6 @@
 import { chromium, type Browser } from '@playwright/test';
-import { test as base, expect } from './fixtures';
-import { SIGNUP_PATH } from './data/rules';
+import { test as base, expect } from '../../src/fixtures';
+import { SIGNUP_PATH } from '../../src/data/rules';
 
 /** Minimum Lighthouse category scores (0–100). */
 const THRESHOLDS = {
