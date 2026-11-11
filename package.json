@@ -1,0 +1,35 @@
+{
+  "name": "nesto-signup-e2e",
+  "version": "1.0.0",
+  "description": "Playwright E2E tests for the nesto signup page (QA)",
+  "scripts": {
+    "test": "playwright test",
+    "test:api": "playwright test --project=api",
+    "test:fr": "playwright test --project=chromium-fr",
+    "test:a11y": "playwright test --grep @a11y",
+    "test:perf": "playwright test --project=perf",
+    "test:visual": "docker run --rm --ipc=host -v \"$PWD\":/work -w /work mcr.microsoft.com/playwright:v1.65.0-noble npx playwright test --project=visual",
+    "test:visual:update": "docker run --rm --ipc=host -v \"$PWD\":/work -w /work mcr.microsoft.com/playwright:v1.65.0-noble npx playwright test --project=visual --update-snapshots",
+    "report": "playwright show-report",
+    "typecheck": "tsc --noEmit",
+    "allure:clean": "rm -rf allure-results allure-report",
+    "allure:generate": "allure generate",
+    "allure:open": "allure open ./allure-report",
+    "test:allure": "npm run allure:clean && playwright test; npm run allure:generate && npm run allure:open"
+  },
+  "type": "commonjs",
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.65.0",
+    "@types/node": "26.6.6",
+    "allure": "3.33.0",
+    "allure-playwright": "3.14.0",
+    "dotenv": "18.0.10",
+    "lighthouse": "12.8.2",
+    "typescript": "7.0.2"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=22.18"
+  }
+}

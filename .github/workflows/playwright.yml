@@ -1,0 +1,88 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    # Same image as the visual baselines, so screenshots match.
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.0-noble
+      options: --ipc=host
+    env:
+      HOME: /root
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run allure:clean
+
+      - name: API tests (fail fast on a broken contract)
+        run: npm run test:api
+      - name: All other tests
+        run: npx playwright test --grep-invert @api
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30
+
+      # ---- Allure report ----
+      - name: Find the GitHub Pages URL
+        id: pages
+        if: ${{ !cancelled() }}
+        uses: actions/configure-pages@v5
+        continue-on-error: true # Pages not enabled yet: report still builds, just without history
+      - name: Restore Allure history from the published report
+        if: ${{ !cancelled() && steps.pages.outputs.base_url != '' }}
+        run: |
+          node -e "
+            fetch(process.argv[1] + '/history.jsonl')
+              .then(r => (r.ok ? r.text() : ''))
+              .then(t => require('fs').writeFileSync('history.jsonl', t))
+              .catch(() => {});
+          " "${{ steps.pages.outputs.base_url }}"
+      - name: Generate Allure report
+        if: ${{ !cancelled() }}
+        run: |
+          npm run allure:generate
+          # Publish the history next to the report so the next run can restore it.
+          cp history.jsonl allure-report/history.jsonl || true
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: allure-report
+          path: allure-report/
+          retention-days: 30
+      - name: Upload Allure report for GitHub Pages
+        if: ${{ !cancelled() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: allure-report/
+
+  deploy-report:
+    # Only main publishes; PRs get the report as a downloadable artifact.
+    if: ${{ !cancelled() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
