@@ -3,6 +3,9 @@ import { test as base, expect } from '../../src/fixtures';
 import { SIGNUP_PATH } from '../../src/data/i18n';
 
 // Minimum Lighthouse category scores (0–100).
+// Assumption: these are targets for the QA environment, which isn't tuned like production.
+// Performance is the noisiest score: it depends on the machine and network the test runs on
+// (shared CI runners vary), so expect it to move a few points between runs.
 const THRESHOLDS = {
   performance: 70,
   accessibility: 90,
@@ -12,7 +15,10 @@ const THRESHOLDS = {
 
 type Category = keyof typeof THRESHOLDS;
 
-// Chromium with a remote debugging port that Lighthouse can drive.
+// Lighthouse drives its own tab over the Chrome DevTools Protocol, so it needs a Chromium
+// started with a debugging port; it doesn't use the Playwright `page`.
+// Assumptions: port 9222 + worker index is free on the machine; the page needs no login or
+// cookies (Lighthouse opens a fresh tab with none of the test's state).
 const test = base.extend<{}, { lighthouseBrowser: { browser: Browser; port: number } }>({
   lighthouseBrowser: [
     async ({}, use, workerInfo) => {
@@ -27,6 +33,8 @@ const test = base.extend<{}, { lighthouseBrowser: { browser: Browser; port: numb
 
 test.describe('signup: Lighthouse', { tag: '@perf' }, () => {
   for (const [locale, path] of Object.entries(SIGNUP_PATH)) {
+    // Assumption: Lighthouse's default settings (mobile emulation with simulated slow 4G) are
+    // the conditions we want to score against.
     test(`${path} meets the score thresholds`, { tag: '@positive' }, async ({ lighthouseBrowser, baseURL }, testInfo) => {
       test.setTimeout(120_000);
       const { default: lighthouse } = await import('lighthouse');
@@ -46,6 +54,7 @@ test.describe('signup: Lighthouse', { tag: '@perf' }, () => {
         contentType: 'text/html',
       });
 
+      // A category Lighthouse couldn't score counts as 0, so it fails rather than being skipped.
       const scores = Object.fromEntries(
         (Object.keys(THRESHOLDS) as Category[]).map((c) => [
           c,
@@ -54,6 +63,7 @@ test.describe('signup: Lighthouse', { tag: '@perf' }, () => {
       ) as Record<Category, number>;
       testInfo.annotations.push({ type: 'lighthouse-scores', description: JSON.stringify(scores) });
 
+      // Soft assertions so one run reports every category below its minimum, not just the first.
       for (const c of Object.keys(THRESHOLDS) as Category[]) {
         expect.soft(scores[c], `${c} score`).toBeGreaterThanOrEqual(THRESHOLDS[c]);
       }

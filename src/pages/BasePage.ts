@@ -1,9 +1,11 @@
 import type { Locator, Page } from '@playwright/test';
 import type { Locale } from '../data/i18n';
 
-// Parts shared by every page. The base URL lives in playwright.config.ts (`use.baseURL`).
+// Parts shared by every page. The base URL is set only in playwright.config.ts (`use.baseURL`),
+// so `open()` always takes a path relative to it.
 export abstract class BasePage {
-  // The app has no footer; the shared elements are in the header.
+  // Assumption: the app has no footer, and the header (language switch + login button) is the
+  // same on every page, with the same test ids.
   readonly languageSwitch: Locator;
   readonly headerLoginButton: Locator;
 
@@ -15,7 +17,11 @@ export abstract class BasePage {
     this.headerLoginButton = page.getByTestId('header-login-button');
   }
 
-  // Opens a path relative to the configured baseURL, then waits until the page is ready.
+  // Opens a path, then waits until the page is usable.
+  // Assumption: "usable" = `readyWhen` is in the DOM AND the network has gone quiet. The app is a
+  // Next.js page that hydrates after load; networkidle is our signal that hydration has finished.
+  // If the app ever adds polling or a long-lived connection, networkidle will hang and this
+  // needs a different ready signal.
   protected async open(path: string, readyWhen: Locator): Promise<void> {
     await this.page.goto(path);
     await readyWhen.waitFor();
