@@ -105,7 +105,7 @@ The testing itself (manual exploration of the signup page in English and French,
 
 ## Bug report
 
-Issues found during manual and automated testing are written up in a **separate bug report, attached to the submission email**. The suite deliberately doesn't include failing tests for those bugs, so it stays green and catches regressions.
+Issues found during manual and automated testing are written up in the [**`Bug Report`**](Bug%20Report/) folder. The suite deliberately doesn't include failing tests for those bugs, so it stays green and catches regressions.
 
 ---
 
@@ -130,6 +130,7 @@ tests/                       # specs only, one folder per test type
 playwright.config.ts         # projects, reporters, base URL
 allurerc.mjs                 # Allure report config
 .github/workflows/playwright.yml
+Bug Report/                  # bug report for the issues found
 ```
 
 ---

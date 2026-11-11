@@ -30,7 +30,7 @@ README.md has setup, commands and coverage. This file is how to change the suite
 - **Field errors** are linked by `aria-describedby`; use `signupPage.fieldError(field)`.
 - **Server error** is a Toastify toast that closes after ~5 s. The page also has an empty `role="alert"` (Next.js route announcer), so find the toast by its text. For screenshots, hover it to pause the timer and use `animations: 'allow'`.
 - **Firefox + axe:** rules `label` and `select-name` crash the page; they're disabled there with an annotation. Detect Firefox via `page.context().browser()?.browserType().name()` (device presets leave `browserName` empty).
-- **Known app bugs** (backend skips name/phone/password validation, `{}` body → 500, 11+ digit phones accepted, FR phone-country label in English) are reported separately in the bug report. The suite deliberately has no tests for them, so it stays green and catches regressions.
+- **Known app bugs** (backend skips name/phone/password validation, `{}` body → 500, 11+ digit phones accepted, FR phone-country label in English) are reported in `Bug Report/`. The suite deliberately has no tests for them, so it stays green and catches regressions.
 
 ## Versions and environments
 - Dependencies are pinned exactly. The Playwright version appears in three places that move together: `package.json`, the Docker image tag in `package.json` scripts, and `.github/workflows/playwright.yml`.
