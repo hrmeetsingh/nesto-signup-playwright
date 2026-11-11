@@ -25,7 +25,7 @@ test.describe('POST /api/accounts', { tag: '@api' }, () => {
     });
   });
 
-  /** this is observed behavior captured in a negative test, non US/Canada region codes are rejected */
+  // this is observed behavior captured in a negative test, non US/Canada region codes are rejected
   test('invalid region returns 422', { tag: '@negative' }, async ({ api }) => {
     const response = await api.createUser(validUser({ province: 'BY' }));
     expect(response.status()).toBe(422);

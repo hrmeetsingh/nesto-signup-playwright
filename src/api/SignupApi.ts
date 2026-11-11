@@ -7,7 +7,7 @@ export const ACCOUNTS_API = '/api/accounts';
 export class SignupApi {
   constructor(private readonly request: APIRequestContext) {}
 
-  /** The same JSON body the UI sends. */
+  // The same JSON body the UI sends.
   toPayload(user: SignupUser, locale: Locale = 'en-CA') {
     return {
       firstName: user.firstName,
@@ -28,7 +28,7 @@ export class SignupApi {
     return this.request.post(ACCOUNTS_API, { data: this.toPayload(user, locale) });
   }
 
-  /** Raw POST, for malformed-request tests. */
+  // Raw POST, for malformed-request tests.
   post(data: unknown, headers?: Record<string, string>): Promise<APIResponse> {
     return this.request.post(ACCOUNTS_API, { data, headers });
   }

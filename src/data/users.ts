@@ -22,7 +22,7 @@ export type InvalidCase = {
 
 let counter = 0;
 
-/** A new email on every call: the API rejects duplicates. */
+// A new email on every call: the API rejects duplicates.
 export function uniqueEmail(): string {
   const worker = process.env.TEST_WORKER_INDEX ?? '0';
   const random = Math.random().toString(36).slice(2, 8);
@@ -39,7 +39,7 @@ const DEFAULTS = {
   consent: true,
 };
 
-/** A valid user with a unique email. Confirm password follows password unless overridden. */
+// A valid user with a unique email. Confirm password follows password unless overridden.
 export function validUser(overrides: Partial<SignupUser> = {}): SignupUser {
   const password = overrides.password ?? DEFAULTS.password;
   return {
@@ -51,12 +51,12 @@ export function validUser(overrides: Partial<SignupUser> = {}): SignupUser {
   };
 }
 
-/** Same values with a fixed email. Visual tests only, never submitted. */
+// Same values with a fixed email. Visual tests only, never submitted.
 export function fixedUser(): SignupUser {
   return validUser({ email: 'assignment+visual@harmeet.test' });
 }
 
-/** Valid edge values. Each one is a real signup. */
+// Valid edge values. Each one is a real signup.
 export const BOUNDARY: { name: string; user: Partial<SignupUser> }[] = [
   { name: 'password of exactly 12 characters', user: { password: 'Abcdefghij12' } },
   { name: 'password of exactly 32 characters', user: { password: 'Abcdefghij1234567890Abcdefghij12' } },
@@ -74,7 +74,7 @@ const nameCases = (field: 'firstName' | 'lastName'): InvalidCase[] => [
   { field, name: 'specialChars', value: 'Test!', rule: 'invalidName' },
 ];
 
-/** Each value breaks exactly one rule. */
+// Each value breaks exactly one rule.
 export const INVALID_CASES: InvalidCase[] = [
   ...nameCases('firstName'),
   ...nameCases('lastName'),
@@ -102,12 +102,12 @@ export const INVALID_CASES: InvalidCase[] = [
   { field: 'passwordConfirmation', name: 'mismatch', value: 'ValidPass124', rule: 'passwordMismatch' },
 ];
 
-/** A valid user with only the case's field replaced. */
+// A valid user with only the case's field replaced.
 export function invalidUser(c: InvalidCase): SignupUser {
   return validUser({ [c.field]: c.value });
 }
 
-/** The phone in the format the app submits. */
+// The phone in the format the app submits.
 export function toE164(phone: string): string {
   return `+1${phone.replace(/\D/g, '')}`;
 }

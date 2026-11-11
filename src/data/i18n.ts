@@ -66,7 +66,7 @@ export const MESSAGES = {
 
 export type RuleKey = keyof (typeof MESSAGES)['en-CA'];
 
-/** The error each field shows when the form is submitted empty. */
+// The error each field shows when the form is submitted empty.
 export const EMPTY_FORM_ERRORS = {
   firstName: 'required',
   lastName: 'required',

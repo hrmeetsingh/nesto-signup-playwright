@@ -2,7 +2,7 @@ import { chromium, type Browser } from '@playwright/test';
 import { test as base, expect } from '../../src/fixtures';
 import { SIGNUP_PATH } from '../../src/data/i18n';
 
-/** Minimum Lighthouse category scores (0–100). */
+// Minimum Lighthouse category scores (0–100).
 const THRESHOLDS = {
   performance: 70,
   accessibility: 90,
@@ -12,7 +12,7 @@ const THRESHOLDS = {
 
 type Category = keyof typeof THRESHOLDS;
 
-/** Chromium with a remote debugging port that Lighthouse can drive. */
+// Chromium with a remote debugging port that Lighthouse can drive.
 const test = base.extend<{}, { lighthouseBrowser: { browser: Browser; port: number } }>({
   lighthouseBrowser: [
     async ({}, use, workerInfo) => {
